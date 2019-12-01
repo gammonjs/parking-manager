@@ -2,6 +2,7 @@ import express from 'express';
 import routes from './routes/index';
 import http from 'http';
 import SocketIO from 'socket.io';
+import LocationSocket from './sockets/locationsSocket';
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -13,14 +14,11 @@ var server = http.Server(app);
 var io = SocketIO(server);
 server.listen(80);
 
+const locationSocket = new LocationSocket(io);
+locationSocket.start();
+
 app.use('/api', routes);
 
-io.on('connect', () => {
-    console.log('client connected');
-});
 
-io.on('connect', () => {
-    console.log('client disconnected');
-});
 
 export default app;
