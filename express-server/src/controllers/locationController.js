@@ -15,6 +15,9 @@ Space.belongsTo(Location, {
 const errorHandler = (res, error) => res.status(400).send(error.errors);
 
 class LocationController {
+    constructor(socket) {
+        this.socket = socket;
+    }
 
     static getAllLocations(req, res, next) {
         Location.findAll({

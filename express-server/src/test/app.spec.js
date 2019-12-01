@@ -1,20 +1,43 @@
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const app = require('../app');
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import app from '../app';
 
-var expect = chai.expect;
 chai.use(chaiHttp);
+chai.should();
 
-describe("GET /api", () => {
+describe("Locations", () => {
 
-    it("should get response with INDEX text", (done) => {
-        chai.request(app)
-            .get('/api')
-            .end((err, res) => {
-                console.log(res.text);
-                expect(res).to.have.status(200);
-                expect(res.text).to.equal('INDEX');
-                done();
-            });
+    describe("GET /", () => {
+
+        it("should get all location records", (done) => {
+             chai.request(app)
+                 .get('/api/locations')
+                 .end((err, res) => {
+                     res.should.have.status(200);
+                     res.body.should.be.a('object');
+                     done();
+                  });
+         });
+
+        it("should get a single location record", (done) => {
+             const id = 1;
+             chai.request(app)
+                 .get(`/api/locations/${id}`)
+                 .end((err, res) => {
+                     res.should.have.status(200);
+                     res.body.should.be.a('object');
+                     done();
+                  });
+         });
+         
+        it("should not get a single location record", (done) => {
+             const id = 10000;
+             chai.request(app)
+                 .get(`/api/locations/${id}`)
+                 .end((err, res) => {
+                     res.should.have.status(404);
+                     done();
+                  });
+         });
     });
 });

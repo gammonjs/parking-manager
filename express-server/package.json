@@ -4,8 +4,8 @@
     "description": "parking location api server",
     "main": "src/app.js",
     "scripts": {
-        "test": "mocha --require babel-register src/test/*.js --exit",
-        "dev": "nodemon src/app.js --exec babel-node --presets babel-preset-env src/app.js"
+        "test": "mocha --require @babel/register 'src/**/**spec.js'",
+        "dev": "nodemon --exec babel-node src/app.js"
     },
     "author": "Joseph Gammon",
     "license": "ISC",
@@ -16,10 +16,11 @@
         "socket.io": "^2.3.0"
     },
     "devDependencies": {
-        "babel-cli": "^6.26.0",
-        "babel-core": "^6.26.3",
-        "babel-loader": "^8.0.6",
-        "babel-preset-env": "^1.7.0",
+        "@babel/cli": "^7.7.4",
+        "@babel/core": "^7.7.4",
+        "@babel/node": "^7.7.4",
+        "@babel/preset-env": "^7.7.4",
+        "@babel/register": "^7.7.4",
         "chai": "^4.2.0",
         "chai-http": "^4.3.0",
         "mocha": "^6.2.2",
