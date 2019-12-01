@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../app';
+import app from './app';
 
 chai.use(chaiHttp);
 chai.should();
@@ -14,7 +14,7 @@ describe("Locations", () => {
                  .get('/api/locations')
                  .end((err, res) => {
                      res.should.have.status(200);
-                     res.body.should.be.a('object');
+                     res.body.should.be.a('Array');
                      done();
                   });
          });

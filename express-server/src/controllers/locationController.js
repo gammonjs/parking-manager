@@ -38,7 +38,8 @@ class LocationController {
             include: [{ model: Space, as: "spaces" }]
         })
         .then(location => {
-            res.status(200).send(location);
+            if(location) res.status(200).send(location);
+            else res.status(404).send();
             next();
         })
         .catch(error => errorHandler(res, error));

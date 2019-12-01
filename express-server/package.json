@@ -4,7 +4,7 @@
     "description": "parking location api server",
     "main": "src/app.js",
     "scripts": {
-        "test": "mocha --require @babel/register 'src/**/**spec.js'",
+        "test": "mocha --require @babel/register 'src/**/**spec.js' --exit",
         "dev": "nodemon --exec babel-node src/app.js"
     },
     "author": "Joseph Gammon",
