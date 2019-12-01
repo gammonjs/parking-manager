@@ -22,6 +22,21 @@ class LocationRouter {
             LocationController.getSingleLocation,
             log
         ]);
+
+        this.routes.post('/', [
+            LocationController.postLocation,
+            log
+        ]);
+
+        this.routes.delete('/:location_id', [
+            LocationController.deleteLocation,
+            log
+        ]);
+
+        this.routes.put('/:location_id', [
+            LocationController.editLocation,
+            log
+        ]);
     }
 }
 
