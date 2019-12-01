@@ -1,5 +1,5 @@
 import express from 'express';
-import routes from './routes/index';
+import LocationRouter from './routes/locationRouter';
 import http from 'http';
 import SocketIO from 'socket.io';
 import LocationSocket from './sockets/locationsSocket';
@@ -17,7 +17,10 @@ server.listen(80);
 const locationSocket = new LocationSocket(io);
 locationSocket.start();
 
-app.use('/api', routes);
+const locationRouter = new LocationRouter(locationSocket);
+locationRouter.start();
+
+app.use('/api/locations', locationRouter.routes);
 
 
 

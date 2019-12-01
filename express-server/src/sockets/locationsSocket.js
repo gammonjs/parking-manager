@@ -21,6 +21,7 @@ class LocationSocket {
     }
 
     start() {
+
         this.socket.on('connect', () => {
 
             console.log('client connected');
