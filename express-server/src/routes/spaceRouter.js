@@ -10,28 +10,26 @@ class LocationRouter {
     start() {
 
         this.routes.get('/:location_id/spaces', [
-            SpaceController.getAllSpaces,
-            LocationSocket.broadcastEvent
+            SpaceController.getAllSpaces
         ]);
 
         this.routes.get('/:location_id/spaces/:space_id', [
-            SpaceController.getSingleSpace,
-            LocationSocket.broadcastEvent
+            SpaceController.getSingleSpace
         ]);
 
         this.routes.put('/:location_id/spaces/:space_id', [
             SpaceController.editSpace,
-            LocationSocket.broadcastEvent
+            LocationSocket.broadcastLocationChangeEvent
         ]);
 
         this.routes.post('/:location_id/spaces', [
             SpaceController.postSpace,
-            LocationSocket.broadcastEvent
+            LocationSocket.broadcastLocationChangeEvent
         ]);
 
         this.routes.delete('/:location_id', [
             SpaceController.deleteSpace,
-            LocationSocket.broadcastEvent
+            LocationSocket.broadcastLocationChangeEvent
         ]);
 
     }

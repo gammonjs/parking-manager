@@ -58,40 +58,47 @@ class LocationSocket {
         });
     }
 
-    static broadcastEvent(req, res, next) {
+
+    static broadcastLocationAddedEvent(req, res, next) {
         const socket = req.app.get('locations-socket');
         const id = req.params.location_id;
 
-        switch (req.method) {
-            case 'POST':
-                if(res.statusCode === 201) {
-                    Location.findOne({
-                        where: { id },
-                        include: [{ model: Space, as: "spaces" }]
-                    })
-                    .then(location => {
-                        socket.emit(EVENT.SERVER_NOTIFICATION__PARKING_LOCATION_ADDED, location);
-                    });
-                }
-                break;
+        if(res.statusCode === 201) {
+            Location.findOne({
+                where: { id: res.breadcrumb },
+                include: [{ model: Space, as: "spaces" }]
+            })
+            .then(location => {
+                socket.emit(EVENT.SERVER_NOTIFICATION__PARKING_LOCATION_ADDED, location);
+            });
+        }
 
-            case 'PUT':
-                if(res.statusCode === 200) {
-                    Location.findOne({
-                        where: { id },
-                        include: [{ model: Space, as: "spaces" }]
-                    })
-                    .then(location => {
-                        socket.emit(EVENT.SERVER_NOTIFICATION__PARKING_LOCATION_CHANGED, location);
-                    });
-                }
-                break;
+        next();
+    }
+    
+    static broadcastLocationChangeEvent(req, res, next) {
+        const socket = req.app.get('locations-socket');
+        const id = req.params.location_id;
 
-            case 'DELETE':
-                if(res.statusCode === 204) {
-                    socket.emit(EVENT.SERVER_NOTIFICATION__PARKING_LOCATION_DELETED, id);
-                }
-                break;
+        if(res.statusCode === 200) {
+            Location.findOne({
+                where: { id },
+                include: [{ model: Space, as: "spaces" }]
+            })
+            .then(location => {
+                socket.emit(EVENT.SERVER_NOTIFICATION__PARKING_LOCATION_CHANGED, location);
+            });
+        }
+
+        next();
+    }
+
+    static broadcastLocationDeletedEvent(req, res, next) {
+        const socket = req.app.get('locations-socket');
+        const id = req.params.location_id;
+
+        if(res.statusCode === 204) {
+            socket.emit(EVENT.SERVER_NOTIFICATION__PARKING_LOCATION_DELETED, id);
         }
 
         next();

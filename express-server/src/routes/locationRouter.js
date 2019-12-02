@@ -18,17 +18,17 @@ class LocationRouter {
 
         this.routes.put('/:location_id', [
             LocationController.editLocation,
-            LocationSocket.broadcastEvent
+            LocationSocket.broadcastLocationChangeEvent
         ]);
 
         this.routes.post('/', [
             LocationController.postLocation,
-            LocationSocket.broadcastEvent
+            LocationSocket.broadcastLocationAddedEvent
         ]);
 
         this.routes.delete('/:location_id', [
             LocationController.deleteLocation,
-            LocationSocket.broadcastEvent
+            LocationSocket.broadcastLocationDeletedEvent
         ]);
     }
 }

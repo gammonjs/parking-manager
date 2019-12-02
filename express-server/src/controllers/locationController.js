@@ -15,6 +15,7 @@ class LocationController {
         Location.create(req.body)
             .then(result => {
                 if(result) {
+                    res.breadcrumb = result.id;
                     res.status(201).send(result);
                 } else {
                     res.status(404).send();
