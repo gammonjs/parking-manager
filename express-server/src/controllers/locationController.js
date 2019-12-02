@@ -22,7 +22,12 @@ class LocationController {
     static postLocation(req, res, next) {
         Location.create(req.body)
             .then(result => {
-                res.status(201).send(result);
+                if(result) {
+                    res.status(201).send(result);
+                } else {
+                    res.status(404).send();
+                }
+                next();
             })
             .catch(error => errorHandler(res, error));
     }
@@ -39,8 +44,11 @@ class LocationController {
                     include: [{ model: Space, as: "spaces" }]
                 })
                     .then(location => {
-                        if (location) res.status(200).send(location);
-                        else res.status(404).send();
+                        if (location) {
+                            res.status(200).send(location);
+                        } else {
+                            res.status(404).send();
+                        }
                         next();
                     })
             })
@@ -52,8 +60,11 @@ class LocationController {
 
         Location.destroy({ where: { id } })
             .then(result => {
-                if (result) res.sendStatus(204);
-                else res.status(404).send();
+                if (result) {
+                    res.sendStatus(204);
+                } else {
+                    res.status(404).send();
+                }
                 next();
             })
             .catch(error => errorHandler(res, error));
@@ -64,7 +75,12 @@ class LocationController {
             include: [{ model: Space, as: "spaces" }]
         })
             .then(locations => {
-                res.status(200).send(locations);
+                if(locations) {
+                    res.status(200).send(locations);
+                }
+                else {
+                    res.status(404).send();
+                }
                 next();
             })
             .catch(errorHandler);
@@ -78,8 +94,29 @@ class LocationController {
             include: [{ model: Space, as: "spaces" }]
         })
             .then(location => {
-                if (location) res.status(200).send(location);
-                else res.status(404).send();
+                if (location) {
+                    res.status(200).send(location);
+                } else {
+                    res.status(404).send();
+                }
+                next();
+            })
+            .catch(error => errorHandler(res, error));
+    }
+
+    static getSingleLocationSpaces(req, res, next) {
+        const id = req.params.location_id;
+
+        Location.findOne({
+            where: { id },
+            include: [{ model: Space, as: "spaces" }]
+        })
+            .then(location => {
+                if(location) {
+                    res.status(200).send(location.spaces);
+                } else {
+                    res.status(404).send();
+                }
                 next();
             })
             .catch(error => errorHandler(res, error));

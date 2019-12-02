@@ -1,7 +1,6 @@
 import express from 'express';
 import LocationRouter from './routes/locationRouter';
 import http from 'http';
-import SocketIO from 'socket.io';
 import LocationSocket from './sockets/locationsSocket';
 
 const PORT = process.env.PORT || 3001;
@@ -11,13 +10,14 @@ app.listen(PORT, console.log(`Server started on port: ${PORT}`));
 app.use(express.json({ limit: '1mb' }));
 
 var server = http.Server(app);
-var io = SocketIO(server);
+var io = require('socket.io')(server);
 server.listen(80);
 
-const locationSocket = new LocationSocket(io);
-locationSocket.start();
+app.set('locations-socket', io);
 
-const locationRouter = new LocationRouter(locationSocket);
+LocationSocket.start(io);
+
+const locationRouter = new LocationRouter();
 locationRouter.start();
 
 app.use('/api/locations', locationRouter.routes);

@@ -5,15 +5,16 @@ import app from '../app';
 chai.use(chaiHttp);
 chai.should();
 
+var location = {
+    name: "Parking Lot TEST",
+    street: "123 Street A",
+    state: "TX",
+    zip: "78711",
+    hours: "M-F 9-5",
+    price: 16,
+};
+
 describe("Locations", () => {
-    var location = {
-        name: "Parking Lot TEST",
-        street: "123 Street A",
-        state: "TX",
-        zip: "78711",
-        hours: "M-F 9-5",
-        price: 16,
-    };
 
     it("shoud post a single location record", (done) => {
         chai.request(app)
@@ -113,6 +114,5 @@ describe("Locations", () => {
                 done();
             });
     });
-
 
 });
