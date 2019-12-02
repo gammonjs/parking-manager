@@ -7,17 +7,9 @@ Location.hasMany(Space, {
     onDelete: 'CASCADE'
 });
 
-Space.belongsTo(Location, {
-    as: 'location',
-    foreignKey: 'location_id'
-});
-
 const errorHandler = (res, error) => res.status(400).send(error.errors);
 
 class LocationController {
-    constructor(socket) {
-        this.socket = socket;
-    }
 
     static postLocation(req, res, next) {
         Location.create(req.body)
@@ -38,21 +30,21 @@ class LocationController {
         Location.update(req.body, {
             returning: true, where: { id }
         })
-            .then(() => {
-                Location.findOne({
-                    where: { id },
-                    include: [{ model: Space, as: "spaces" }]
-                })
-                    .then(location => {
-                        if (location) {
-                            res.status(200).send(location);
-                        } else {
-                            res.status(404).send();
-                        }
-                        next();
-                    })
+        .then(() => {
+            Location.findOne({
+                where: { id },
+                include: [{ model: Space, as: "spaces" }]
             })
-            .catch(error => errorHandler(res, error));
+            .then(location => {
+                if (location) {
+                    res.status(200).send(location);
+                } else {
+                    res.status(404).send();
+                }
+                next();
+            })
+        })
+        .catch(error => errorHandler(res, error));
     }
 
     static deleteLocation(req, res, next) {
@@ -96,24 +88,6 @@ class LocationController {
             .then(location => {
                 if (location) {
                     res.status(200).send(location);
-                } else {
-                    res.status(404).send();
-                }
-                next();
-            })
-            .catch(error => errorHandler(res, error));
-    }
-
-    static getSingleLocationSpaces(req, res, next) {
-        const id = req.params.location_id;
-
-        Location.findOne({
-            where: { id },
-            include: [{ model: Space, as: "spaces" }]
-        })
-            .then(location => {
-                if(location) {
-                    res.status(200).send(location.spaces);
                 } else {
                     res.status(404).send();
                 }
